@@ -7,7 +7,7 @@ elif [ ! -e "$TB" ]; then
     echo "Table Does Not Exist"
 else
         echo Enter column name you want to update from these columns or exit 
-        arr=($(awk -F: '{if ($3!="P") print $1}' "${TB}MD"))
+        arr=($(awk -F: '{print $1}' "${TB}MD"))
         echo ${arr[@]} "exit"
         flag=false
         while true; do
@@ -17,6 +17,7 @@ else
                                 flag=true
                                 coltype=$(awk -F: -v search="$colname" '$1 == search {print $2}' "${TB}MD")
                                 colcon=$(awk -F: -v search="$colname" '$1 == search {print $3}' "${TB}MD")
+				col_=$(awk -F: -v search="$colname" '$1 == search {print NR}' "${TB}MD")
                                 while true; do
                                         read -p "Enter your new ${colname} : " value
                                         if [ -z "$value" ]; then
@@ -25,6 +26,12 @@ else
                                                 echo Invalid Type. Expected Type ${coltype}                     
                                         elif [[ "$coltype" == "string" && ! "$value" =~ ^[a-zA-Z0-9]+$ ]]; then
                                                 echo Invalid Type. Expected Type ${coltype}
+					elif [[ "$colcon" == "P" ]]; then
+						if awk -F: -v value="$value" -v col="$col_" '$col == value' "$TB" | grep -q .; then
+                                                	echo "This is a primary key col and value already exists in that column '$colname'"
+						else
+							break
+						fi
                                         else
                                                 break
                                         fi
