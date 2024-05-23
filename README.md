@@ -32,7 +32,7 @@ This project is a Bash Shell Script Database Management System (DBMS) that enabl
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/bash-dbms-project.git
+    git clone https://github.com/yassa3/Bash_DBMS_Project.git
     ```
 2. Navigate to the project directory:
     ```bash
